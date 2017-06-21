@@ -10,6 +10,8 @@ namespace Zebble.Plugin
 	{
 		const int CompleteCirecleDegree = 360;
 
+		AsyncLock AsyncLock = new AsyncLock();
+
 		public bool CanRotateX { get; set; } = true;
 		public bool CanRotateY { get; set; } = true;
 		public bool CanRotateZ { get; set; } = true;
@@ -46,24 +48,26 @@ namespace Zebble.Plugin
 		public InteractiveCanvas()
 		{
 			Panning.Handle(Panned);
-			Pinched.Handle(OnPinched);
+			Pinching.Handle(OnPinched);
+			UserRotating.Handle(UserRotated);
 		}
 
-		public Task OnRotate(RotatedEventArg args)
+		async Task UserRotated(float degree)
 		{
-			if(CanRotateX && args.Touches == RotateXTouches)
-				RotateXBy(args.RotationCenter, args.RotatedDegree);
+			using (await AsyncLock.LockAsync())
+			{
+				if(CanRotateX)
+					RotateXBy(degree);
 			
-			if(CanRotateY && args.Touches == RotateYTouches)
-				RotateYBy(args.RotationCenter, args.RotatedDegree);
+				if(CanRotateY)
+					RotateYBy(degree);
 			
-			if(CanRotateZ && args.Touches == RotateZTouches)
-				RotateZBy(args.RotationCenter, args.RotatedDegree);
-
-			return Task.CompletedTask;
+				if(CanRotateZ)
+					RotateZBy(degree);
+			}
 		}
 
-		void RotateZBy(Point rotationCenter, float rotatedDegree)
+		void RotateZBy(float rotatedDegree)
 		{
 			if(InitialRotationZ == null)
 				InitialRotationZ = Rotation;
@@ -74,7 +78,7 @@ namespace Zebble.Plugin
 			this.Rotation(newRotation);
 		}
 
-		void RotateYBy(Point rotationCenter, float rotatedDegree)
+		void RotateYBy(float rotatedDegree)
 		{
 			if(InitialRotationY == null)
 				InitialRotationY = RotationY;
@@ -85,7 +89,7 @@ namespace Zebble.Plugin
 			this.RotationY(newRotationY);
 		}
 
-		void RotateXBy(Point rotationCenter, float rotatedDegree)
+		void RotateXBy(float rotatedDegree)
 		{
 			if(InitialRotationX == null)
 				InitialRotationX = RotationX;
@@ -95,17 +99,17 @@ namespace Zebble.Plugin
 
 			this.RotationX(newRotationX);
 		}
-
-		// The access modifier should change to private after Pinched event starts working.
-		public Task OnPinched(PinchedEventArg args)
+		
+		async Task OnPinched(PinchedEventArg args)
 		{
-			if(CanScaleX)
-				ScaleXBy(GetCenter(args.Touch1, args.Touch2), args.Scale);
+			using(await AsyncLock.LockAsync())
+			{
+				if(CanScaleX)
+					ScaleXBy(GetCenter(args.Touch1, args.Touch2), args.Scale);
 
-			if(CanScaleY)
-				ScaleYBy(GetCenter(args.Touch1, args.Touch2), args.Scale);
-
-			return Task.CompletedTask;
+				if(CanScaleY)
+					ScaleYBy(GetCenter(args.Touch1, args.Touch2), args.Scale);
+			}
 		}
 
 		private Point GetCenter(Point touch1, Point touch2) =>
@@ -143,15 +147,16 @@ namespace Zebble.Plugin
 			this.Width(newWidth).X(newX);
 		}
 		
-		Task Panned(PannedEventArg args)
+		async Task Panned(PannedEventArg args)
 		{
-			if(CanDragX && args.Touches == DragXTouches)
-				DragXBy(args.To.X - args.From.X);
+			using(await AsyncLock.LockAsync())
+			{
+				if(CanDragX && args.Touches == DragXTouches)
+					DragXBy(args.To.X - args.From.X);
 			
-			if(CanDragY && args.Touches == DragYTouches)
-				DragYBy(args.To.Y - args.From.Y);
-
-			return Task.CompletedTask;
+				if(CanDragY && args.Touches == DragYTouches)
+					DragYBy(args.To.Y - args.From.Y);
+			}
 		}
 
 		[EscapeGCop("The argument is meaningful here")]
@@ -186,30 +191,5 @@ namespace Zebble.Plugin
 		///  Max drags value should be changed by scaling
 		/// </summary>
 		float GetMaxDragX() => MaxDragX + ActualWidth - (InitialWidth ?? ActualWidth);
-	}
-
-	//public class PinchedEventArg
-	//{
-	//	public Point PinchedCenter { get; }
-	//	public int PinchedPixels { get; }
-
-	//	public PinchedEventArg(Point center, int pixels)
-	//	{
-	//		PinchedCenter = center;
-	//		PinchedPixels = pixels;
-	//	}
-	//}
-	public class RotatedEventArg
-	{
-		public Point RotationCenter { get; }
-		public float RotatedDegree { get; }
-		public int Touches { get; }
-
-		public RotatedEventArg(Point center, float degree, int touches)
-		{
-			RotationCenter = center;
-			RotatedDegree = degree;
-			Touches = touches;
-		}
 	}
 }

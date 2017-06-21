@@ -5,7 +5,7 @@
     "System.ComponentModel": "4.3.0",
     "System.Data.Common": "4.3.0",
     "System.Threading": "4.3.0",
-    "Zebble": "4.0.182"
+    "Zebble": "4.0.184"
   },
   "frameworks": {
     "uap10.0": {}

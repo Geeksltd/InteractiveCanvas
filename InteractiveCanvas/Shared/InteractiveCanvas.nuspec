@@ -9,9 +9,9 @@
 	<!--<owners>Your name</owners>-->
 	<!--<licenseUrl>http://your-website.com/Licence.txt</licenseUrl>-->
 	<copyright>Copyright ©2017 Mobile App Technologies Ltd - All rights reserved.</copyright>
-    <dependencies>
-      <dependency id="Zebble" version="4.0.182" />
-    </dependencies>
+    <!--<dependencies>
+      <dependency id="Zebble" version="4.0.184" />
+    </dependencies>-->
   </metadata>
   <files>
     <file src="lib\InteractiveCanvas.iOS.*" target="lib\Xamarin.iOS10\" />
