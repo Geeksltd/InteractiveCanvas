@@ -10,8 +10,5 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)InteractiveCanvas.cs" />
-
-    <Content Include="$(MSBuildThisFileDirectory)InteractiveCanvas.nuspec" />
   </ItemGroup>
-  
 </Project>

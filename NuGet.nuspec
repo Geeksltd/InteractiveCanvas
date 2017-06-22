@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Zebble.Plugin.InteractiveCanvas</id>
+    <version>1.0.2</version>
+    <title>Interactive Canvas plugin for Zebble for Xamarin</title>
+    <description>A powerful wrapper control that allows user manipulation of its contents such as rotation, scaling, etc.</description>
+	<authors>Mobile App Technologies Ltd</authors>
+	<projectUrl>https://zebble.net/</projectUrl>	
+	<copyright>Copyright ©2017 Mobile App Technologies Ltd - All rights reserved.</copyright>
+    <!--<dependencies>
+      <dependency id="Zebble" version="4.0.184" />
+    </dependencies>-->
+  </metadata>
+  <files>
+    <file src="InteractiveCanvas\lib\Zebble.Plugin.InteractiveCanvas.iOS.*" target="lib\Xamarin.iOS10\" />
+    <file src="InteractiveCanvas\lib\Zebble.Plugin.InteractiveCanvas.Android.*" target="lib\MonoAndroid10\" />
+    <file src="InteractiveCanvas\lib\Zebble.Plugin.InteractiveCanvas.UWP.*" target="lib\UAP10\" />
+  </files>
+
+</package>
