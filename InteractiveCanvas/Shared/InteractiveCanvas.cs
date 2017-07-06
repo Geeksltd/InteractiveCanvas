@@ -6,190 +6,190 @@ using Zebble;
 
 namespace Zebble.Plugin
 {
-	public partial class InteractiveCanvas : Zebble.Canvas
-	{
-		const int CompleteCirecleDegree = 360;
+    public partial class InteractiveCanvas : Zebble.Canvas
+    {
+        const int CompleteCirecleDegree = 360;
 
-		AsyncLock AsyncLock = new AsyncLock();
+        AsyncLock AsyncLock = new AsyncLock();
 
-		public bool CanRotateX { get; set; } = true;
-		public bool CanRotateY { get; set; } = true;
-		public bool CanRotateZ { get; set; } = true;
-		public bool CanDragX { get; set; } = true;
-		public bool CanDragY { get; set; } = true;
-		public bool CanScaleX { get; set; } = true;
-		public bool CanScaleY { get; set; } = true;
-		public float MaxRotateX { get; set; } = CompleteCirecleDegree;
-		public float MaxRotateY { get; set; } = CompleteCirecleDegree;
-		public float MaxRotateZ { get; set; } = CompleteCirecleDegree;
-		public float MaxDragX { get; set; } = int.MaxValue;
-		public float MaxDragY { get; set; } = int.MaxValue;
-		public float MaxScaleX { get; set; } = int.MaxValue;
-		public float MaxScaleY { get; set; } = int.MaxValue;
-		public int RotateXTouches { get; set; } = 2;
-		public int RotateYTouches { get; set; } = 2;
-		public int RotateZTouches { get; set; } = 2;
-		public int DragXTouches { get; set; } = 1;
-		public int DragYTouches { get; set; } = 1;
-		public bool RotateXWithDevice { get; set; } = false;
-		public bool RotateYWithDevice { get; set; } = false;
-		public bool RotateZWithDevice { get; set; } = false;
-		
-		float? InitialX;
-		float? InitialY;
+        public bool CanRotateX { get; set; } = true;
+        public bool CanRotateY { get; set; } = true;
+        public bool CanRotateZ { get; set; } = true;
+        public bool CanDragX { get; set; } = true;
+        public bool CanDragY { get; set; } = true;
+        public bool CanScaleX { get; set; } = true;
+        public bool CanScaleY { get; set; } = true;
+        public float MaxRotateX { get; set; } = CompleteCirecleDegree;
+        public float MaxRotateY { get; set; } = CompleteCirecleDegree;
+        public float MaxRotateZ { get; set; } = CompleteCirecleDegree;
+        public float MaxDragX { get; set; } = int.MaxValue;
+        public float MaxDragY { get; set; } = int.MaxValue;
+        public float MaxScaleX { get; set; } = int.MaxValue;
+        public float MaxScaleY { get; set; } = int.MaxValue;
+        public int RotateXTouches { get; set; } = 2;
+        public int RotateYTouches { get; set; } = 2;
+        public int RotateZTouches { get; set; } = 2;
+        public int DragXTouches { get; set; } = 1;
+        public int DragYTouches { get; set; } = 1;
+        public bool RotateXWithDevice { get; set; } = false;
+        public bool RotateYWithDevice { get; set; } = false;
+        public bool RotateZWithDevice { get; set; } = false;
 
-		float? InitialWidth;
-		float? InitialHeight;
-		
-		float? InitialRotationX;
-		float? InitialRotationY;
-		float? InitialRotationZ;
+        float? InitialX;
+        float? InitialY;
 
-		public InteractiveCanvas()
-		{
-			Panning.Handle(Panned);
-			Pinching.Handle(OnPinched);
-			UserRotating.Handle(UserRotated);
-		}
+        float? InitialWidth;
+        float? InitialHeight;
 
-		async Task UserRotated(float degree)
-		{
-			using (await AsyncLock.LockAsync())
-			{
-				if(CanRotateX)
-					RotateXBy(degree);
-			
-				if(CanRotateY)
-					RotateYBy(degree);
-			
-				if(CanRotateZ)
-					RotateZBy(degree);
-			}
-		}
+        float? InitialRotationX;
+        float? InitialRotationY;
+        float? InitialRotationZ;
 
-		void RotateZBy(float rotatedDegree)
-		{
-			if(InitialRotationZ == null)
-				InitialRotationZ = Rotation;
+        public InteractiveCanvas()
+        {
+            Panning.Handle(Panned);
+            Pinching.Handle(OnPinched);
+            UserRotating.Handle(UserRotated);
+        }
 
-			var newRotation = (Rotation + rotatedDegree)
-				.LimitWithin(InitialRotationZ.Value - MaxRotateZ, InitialRotationZ.Value + MaxRotateZ);
+        async Task UserRotated(float degree)
+        {
+            using (await AsyncLock.LockAsync())
+            {
+                if (CanRotateX)
+                    RotateXBy(degree);
 
-			this.Rotation(newRotation);
-		}
+                if (CanRotateY)
+                    RotateYBy(degree);
 
-		void RotateYBy(float rotatedDegree)
-		{
-			if(InitialRotationY == null)
-				InitialRotationY = RotationY;
+                if (CanRotateZ)
+                    RotateZBy(degree);
+            }
+        }
 
-			var newRotationY = (RotationY + rotatedDegree)
-				.LimitWithin(InitialRotationY.Value - MaxRotateY, InitialRotationY.Value + MaxRotateY);
+        void RotateZBy(float rotatedDegree)
+        {
+            if (InitialRotationZ == null)
+                InitialRotationZ = Rotation;
 
-			this.RotationY(newRotationY);
-		}
+            var newRotation = (Rotation + rotatedDegree)
+                .LimitWithin(InitialRotationZ.Value - MaxRotateZ, InitialRotationZ.Value + MaxRotateZ);
 
-		void RotateXBy(float rotatedDegree)
-		{
-			if(InitialRotationX == null)
-				InitialRotationX = RotationX;
+            this.Rotation(newRotation);
+        }
 
-			var newRotationX = (RotationX + rotatedDegree)
-				.LimitWithin(InitialRotationX.Value - MaxRotateX, InitialRotationX.Value + MaxRotateX);
+        void RotateYBy(float rotatedDegree)
+        {
+            if (InitialRotationY == null)
+                InitialRotationY = RotationY;
 
-			this.RotationX(newRotationX);
-		}
-		
-		async Task OnPinched(PinchedEventArg args)
-		{
-			using(await AsyncLock.LockAsync())
-			{
-				if(CanScaleX)
-					ScaleXBy(GetCenter(args.Touch1, args.Touch2), args.Scale);
+            var newRotationY = (RotationY + rotatedDegree)
+                .LimitWithin(InitialRotationY.Value - MaxRotateY, InitialRotationY.Value + MaxRotateY);
 
-				if(CanScaleY)
-					ScaleYBy(GetCenter(args.Touch1, args.Touch2), args.Scale);
-			}
-		}
+            this.RotationY(newRotationY);
+        }
 
-		private Point GetCenter(Point touch1, Point touch2) =>
-			new Point((touch1.X + touch2.X) / 2, (touch1.Y + touch2.Y) / 2);
+        void RotateXBy(float rotatedDegree)
+        {
+            if (InitialRotationX == null)
+                InitialRotationX = RotationX;
 
-		void ScaleYBy(Point pinchedCenter, float pinchedPixels)
-		{
-			if(InitialHeight == null)
-				InitialHeight = ActualHeight;
+            var newRotationX = (RotationX + rotatedDegree)
+                .LimitWithin(InitialRotationX.Value - MaxRotateX, InitialRotationX.Value + MaxRotateX);
 
-			var newHeight = (ActualHeight + pinchedPixels).LimitWithin(InitialHeight.Value - MaxScaleY, InitialHeight.Value + MaxScaleY);
-			var yDelta = (pinchedCenter.Y / ActualHeight) * pinchedPixels;
-			var newY = ActualY - yDelta;
+            this.RotationX(newRotationX);
+        }
 
-			// the initial position sould be fixed on scaling time.
-			if(InitialY.HasValue)
-				InitialY -= yDelta;
+        async Task OnPinched(PinchedEventArgs args)
+        {
+            using (await AsyncLock.LockAsync())
+            {
+                if (CanScaleX)
+                    ScaleXBy(GetCenter(args.Touch1, args.Touch2), args.Scale);
 
-			this.Height(newHeight).Y(newY);
-		}
+                if (CanScaleY)
+                    ScaleYBy(GetCenter(args.Touch1, args.Touch2), args.Scale);
+            }
+        }
 
-		void ScaleXBy(Point pinchedCenter, float pinchedPixels)
-		{
-			if(InitialWidth == null)
-				InitialWidth = ActualWidth;
+        private Point GetCenter(Point touch1, Point touch2) =>
+            new Point((touch1.X + touch2.X) / 2, (touch1.Y + touch2.Y) / 2);
 
-			var newWidth = (ActualWidth + pinchedPixels).LimitWithin(InitialWidth.Value - MaxScaleX, InitialWidth.Value + MaxScaleX);
-			var xDelta = (pinchedCenter.X / ActualWidth) * pinchedPixels;
-			var newX = ActualX - xDelta;
+        void ScaleYBy(Point pinchedCenter, float pinchedPixels)
+        {
+            if (InitialHeight == null)
+                InitialHeight = ActualHeight;
 
-			// the initial position sould be fixed on scaling time.
-			if(InitialX.HasValue)
-				InitialX -= xDelta;
+            var newHeight = (ActualHeight + pinchedPixels).LimitWithin(InitialHeight.Value - MaxScaleY, InitialHeight.Value + MaxScaleY);
+            var yDelta = (pinchedCenter.Y / ActualHeight) * pinchedPixels;
+            var newY = ActualY - yDelta;
 
-			this.Width(newWidth).X(newX);
-		}
-		
-		async Task Panned(PannedEventArg args)
-		{
-			using(await AsyncLock.LockAsync())
-			{
-				if(CanDragX && args.Touches == DragXTouches)
-					DragXBy(args.To.X - args.From.X);
-			
-				if(CanDragY && args.Touches == DragYTouches)
-					DragYBy(args.To.Y - args.From.Y);
-			}
-		}
+            // the initial position sould be fixed on scaling time.
+            if (InitialY.HasValue)
+                InitialY -= yDelta;
 
-		[EscapeGCop("The argument is meaningful here")]
-		void DragYBy(float y)
-		{
-			if(!InitialY.HasValue)
-				InitialY = ActualY;
+            this.Height(newHeight).Y(newY);
+        }
 
-			var newY = (ActualY + y).LimitWithin(InitialY.Value - GetMaxDragY(), InitialY.Value + GetMaxDragY());
+        void ScaleXBy(Point pinchedCenter, float pinchedPixels)
+        {
+            if (InitialWidth == null)
+                InitialWidth = ActualWidth;
 
-			Y.Set(newY);
-		}
+            var newWidth = (ActualWidth + pinchedPixels).LimitWithin(InitialWidth.Value - MaxScaleX, InitialWidth.Value + MaxScaleX);
+            var xDelta = (pinchedCenter.X / ActualWidth) * pinchedPixels;
+            var newX = ActualX - xDelta;
 
-		/// <summary>
-		///  Max drags value should be changed by scaling
-		/// </summary>
-		float GetMaxDragY() => MaxDragY + ActualHeight - (InitialHeight ?? ActualHeight);
+            // the initial position sould be fixed on scaling time.
+            if (InitialX.HasValue)
+                InitialX -= xDelta;
 
-		[EscapeGCop("The argument is meaningful here")]
-		void DragXBy(float x)
-		{
-			
-			if(!InitialX.HasValue)
-				InitialX = ActualX;
+            this.Width(newWidth).X(newX);
+        }
 
-			var newX = (ActualX + x).LimitWithin(InitialX.Value - GetMaxDragX(), InitialX.Value + GetMaxDragX());
+        async Task Panned(PannedEventArgs args)
+        {
+            using (await AsyncLock.LockAsync())
+            {
+                if (CanDragX && args.Touches == DragXTouches)
+                    DragXBy(args.To.X - args.From.X);
 
-			X.Set(newX);
-		}
+                if (CanDragY && args.Touches == DragYTouches)
+                    DragYBy(args.To.Y - args.From.Y);
+            }
+        }
 
-		/// <summary>
-		///  Max drags value should be changed by scaling
-		/// </summary>
-		float GetMaxDragX() => MaxDragX + ActualWidth - (InitialWidth ?? ActualWidth);
-	}
+        [EscapeGCop("The argument is meaningful here")]
+        void DragYBy(float y)
+        {
+            if (!InitialY.HasValue)
+                InitialY = ActualY;
+
+            var newY = (ActualY + y).LimitWithin(InitialY.Value - GetMaxDragY(), InitialY.Value + GetMaxDragY());
+
+            Y.Set(newY);
+        }
+
+        /// <summary>
+        ///  Max drags value should be changed by scaling
+        /// </summary>
+        float GetMaxDragY() => MaxDragY + ActualHeight - (InitialHeight ?? ActualHeight);
+
+        [EscapeGCop("The argument is meaningful here")]
+        void DragXBy(float x)
+        {
+
+            if (!InitialX.HasValue)
+                InitialX = ActualX;
+
+            var newX = (ActualX + x).LimitWithin(InitialX.Value - GetMaxDragX(), InitialX.Value + GetMaxDragX());
+
+            X.Set(newX);
+        }
+
+        /// <summary>
+        ///  Max drags value should be changed by scaling
+        /// </summary>
+        float GetMaxDragX() => MaxDragX + ActualWidth - (InitialWidth ?? ActualWidth);
+    }
 }
