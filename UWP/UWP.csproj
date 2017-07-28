@@ -11,7 +11,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Zebble.Plugin</RootNamespace>
-    <AssemblyName>Zebble.Plugin.InteractiveCanvas.UWP</AssemblyName>
+    <AssemblyName>Zebble.InteractiveCanvas.UWP</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
