@@ -3,12 +3,12 @@
   <metadata>
     <id>Zebble.Plugin.InteractiveCanvas</id>
     <version>3.6.447</version>
-    <title>Interactive Canvas for Zebble for Xamarin</title>
+    <title>Interactive Canvas for Zebble (Xamarin)</title>
     <description>A powerful wrapper control that allows user manipulation of its contents such as rotation, scaling, etc.</description>
     <authors>Mobile App Technologies Ltd</authors>
     <iconUrl>https://raw.githubusercontent.com/Geeksltd/InteractiveCanvas/master/Icon.png</iconUrl>
     <projectUrl>https://github.com/Geeksltd/InteractiveCanvas</projectUrl>
-    <copyright>Copyright ©2017 Mobile App Technologies Ltd - All rights reserved.</copyright>   
+    <copyright>Copyright ©2017 Mobile App Technologies Ltd - All rights reserved.</copyright>
   </metadata>
   <files>
     <file src="..\..\lib\Zebble.InteractiveCanvas.iOS.*" target="lib\Xamarin.iOS10\" />
