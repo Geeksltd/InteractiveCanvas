@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
-    <id>Zebble.Plugin.InteractiveCanvas</id>
-    <version>3.6.447</version>
+    <id>Zebble.InteractiveCanvas</id>
+    <version>3.6.450</version>
     <title>Interactive Canvas for Zebble (Xamarin)</title>
     <description>A powerful wrapper control that allows user manipulation of its contents such as rotation, scaling, etc.</description>
     <authors>Mobile App Technologies Ltd</authors>
