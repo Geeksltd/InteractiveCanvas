@@ -52,18 +52,15 @@ namespace Zebble.Plugin
             UserRotating.Handle(UserRotated);
         }
 
-        async Task UserRotated(float degree)
+        async Task UserRotated(UserRotatingEventArgs args)
         {
             using (await AsyncLock.LockAsync())
             {
-                if (CanRotateX)
-                    RotateXBy(degree);
+                if (CanRotateX) RotateXBy(args.Degrees);
 
-                if (CanRotateY)
-                    RotateYBy(degree);
+                if (CanRotateY) RotateYBy(args.Degrees);
 
-                if (CanRotateZ)
-                    RotateZBy(degree);
+                if (CanRotateZ) RotateZBy(args.Degrees);
             }
         }
 
@@ -105,10 +102,10 @@ namespace Zebble.Plugin
             using (await AsyncLock.LockAsync())
             {
                 if (CanScaleX)
-                    ScaleXBy(GetCenter(args.Touch1, args.Touch2), args.Scale);
+                    ScaleXBy(GetCenter(args.Touch1, args.Touch2), args.ChangeScale);
 
                 if (CanScaleY)
-                    ScaleYBy(GetCenter(args.Touch1, args.Touch2), args.Scale);
+                    ScaleYBy(GetCenter(args.Touch1, args.Touch2), args.ChangeScale);
             }
         }
 
