@@ -45,9 +45,11 @@ namespace Zebble.Plugin
         float? InitialRotationY;
         float? InitialRotationZ;
 
+        float CenterX, CenterY;
+
         public InteractiveCanvas()
         {
-            Panning.Handle(Panned);
+            Panning.Handle(OnPanning);
             Pinching.Handle(OnPinched);
             UserRotating.Handle(UserRotated);
         }
@@ -56,11 +58,11 @@ namespace Zebble.Plugin
         {
             using (await AsyncLock.LockAsync())
             {
-                if (CanRotateX) RotateXBy(args.Degrees);
+                if (CanRotateX && RotateXTouches == 2) RotateXBy(args.Degrees);
 
-                if (CanRotateY) RotateYBy(args.Degrees);
+                if (CanRotateY && RotateYTouches == 2) RotateYBy(args.Degrees);
 
-                if (CanRotateZ) RotateZBy(args.Degrees);
+                if (CanRotateZ && RotateZTouches == 2) RotateZBy(args.Degrees);
             }
         }
 
@@ -144,15 +146,29 @@ namespace Zebble.Plugin
             this.Width(newWidth).X(newX);
         }
 
-        async Task Panned(PannedEventArgs args)
+        async Task OnPanning(PannedEventArgs args)
         {
             using (await AsyncLock.LockAsync())
             {
-                if (CanDragX && args.Touches == DragXTouches)
-                    DragXBy(args.To.X - args.From.X);
+                if (CanDragX || CanDragY)
+                {
+                    if (CanDragX && args.Touches == DragXTouches)
+                        DragXBy(args.To.X - args.From.X);
 
-                if (CanDragY && args.Touches == DragYTouches)
-                    DragYBy(args.To.Y - args.From.Y);
+                    if (CanDragY && args.Touches == DragYTouches)
+                        DragYBy(args.To.Y - args.From.Y);
+                }
+                else
+                {
+                    if (CanRotateX && RotateXTouches == args.Touches)
+                        RotateXBy((float)((args.To.X - args.From.X) * 0.5));
+
+                    if (CanRotateY && RotateYTouches == args.Touches)
+                        RotateYBy((float)((args.To.Y - args.From.Y) * 0.5));
+
+                    if (CanRotateZ && RotateZTouches == args.Touches)
+                        RotateZBy((float)(((args.To.X - args.From.X) - (args.To.Y - args.From.Y)) * 0.5));
+                }
             }
         }
 
