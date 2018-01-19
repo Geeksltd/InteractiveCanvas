@@ -15,6 +15,5 @@
     <None Include="$(MSBuildThisFileDirectory)NuGet\CreatePackage.bat" />
     <None Include="$(MSBuildThisFileDirectory)NuGet\NuGet.exe" />
     <None Include="$(MSBuildThisFileDirectory)NuGet\NuGet.nuspec" />
-    <None Include="$(MSBuildThisFileDirectory)NuGet\Zebble.Plugin.InteractiveCanvas.3.6.446.nupkg" />
   </ItemGroup>
 </Project>
