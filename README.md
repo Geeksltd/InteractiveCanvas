@@ -1,4 +1,4 @@
-[logo]: https://raw.githubusercontent.com/Geeksltd/Zebble.InteractiveCanvas/master/Shared/NuGet/Icon.png "Zebble.InteractiveCanvas"
+[logo]: https://raw.githubusercontent.com/Geeksltd/Zebble.InteractiveCanvas/master/Icon.png "Zebble.InteractiveCanvas"
 
 
 ## Zebble.InteractiveCanvas
