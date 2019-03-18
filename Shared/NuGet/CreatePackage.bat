@@ -1,1 +1,1 @@
-Nuget.exe pack NuGet.nuspec
+NuGet.exe pack Nuget.nuspec
