@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Zebble;
+using Olive;
 
 namespace Zebble.Plugin
 {
     public partial class InteractiveCanvas : Zebble.Canvas
     {
-        const int CompleteCirecleDegree = 360;
+        const int COMPLETE_CIRCLE_DEGREE = 360;
 
         AsyncLock AsyncLock = new AsyncLock();
 
@@ -19,9 +20,9 @@ namespace Zebble.Plugin
         public bool CanDragY { get; set; } = true;
         public bool CanScaleX { get; set; } = true;
         public bool CanScaleY { get; set; } = true;
-        public float MaxRotateX { get; set; } = CompleteCirecleDegree;
-        public float MaxRotateY { get; set; } = CompleteCirecleDegree;
-        public float MaxRotateZ { get; set; } = CompleteCirecleDegree;
+        public float MaxRotateX { get; set; } = COMPLETE_CIRCLE_DEGREE;
+        public float MaxRotateY { get; set; } = COMPLETE_CIRCLE_DEGREE;
+        public float MaxRotateZ { get; set; } = COMPLETE_CIRCLE_DEGREE;
         public float MaxDragX { get; set; } = int.MaxValue;
         public float MaxDragY { get; set; } = int.MaxValue;
         public float MaxScaleX { get; set; } = int.MaxValue;
@@ -56,7 +57,7 @@ namespace Zebble.Plugin
 
         async Task UserRotated(UserRotatingEventArgs args)
         {
-            using (await AsyncLock.LockAsync())
+            using (await AsyncLock.Lock())
             {
                 if (CanRotateX && RotateXTouches == 2) RotateXBy(args.Degrees);
 
@@ -101,7 +102,7 @@ namespace Zebble.Plugin
 
         async Task OnPinched(PinchedEventArgs args)
         {
-            using (await AsyncLock.LockAsync())
+            using (await AsyncLock.Lock())
             {
                 if (CanScaleX)
                     ScaleXBy(GetCenter(args.Touch1, args.Touch2), args.ChangeScale);
@@ -148,7 +149,7 @@ namespace Zebble.Plugin
 
         async Task OnPanning(PannedEventArgs args)
         {
-            using (await AsyncLock.LockAsync())
+            using (await AsyncLock.Lock())
             {
                 if (CanDragX || CanDragY)
                 {
